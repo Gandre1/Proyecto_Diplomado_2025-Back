@@ -19,4 +19,4 @@ router.post('/', verifyAdmin, ProductController.create);
 router.get('/', ProductController.getAll);
 router.delete('/:id', verifyAdmin, ProductController.delete);
 
-module.exports = router;
+module.exports = router;  
