@@ -29,6 +29,7 @@ class productController {
       res.status(500).json({ message: error.message });
     }
   }
+  
 }
 
 module.exports = new productController();

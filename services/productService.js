@@ -15,6 +15,7 @@ class productService {
     await ProductRepository.deleteById(productId);
     return product;
   }
+  
 }
 
 module.exports = new productService();
