@@ -1,35 +1,45 @@
 const LapidaRepository = require('../db/repositorios/lapidaRepository');
+const TipoLapida = require('../models/tipoLapida');
+const DisenoLapida = require('../models/disenoLapida');
 
 class LapidaService {
 
-  getImageUrl(tiposLapida, tiposDiseno) {
-    const imageMap = {
-      Tradicional: {
-        Floral: '/images/lapidas/tradicional-floral.jpg',
-        Minimalista: '/images/lapidas/tradicional-minimalista.jpg',
-      },
-      Moderna: {
-        Floral: '/images/lapidas/moderna-floral.jpg',
-        Minimalista: '/images/lapidas/moderna-minimalista.jpg',
-      },
-    };
-  
-    const imagePath = imageMap[tiposLapida]?.[tiposDiseno] || '/images/lapidas/default.jpg';
-    return `http://localhost:5000${imagePath}`;
-  }  
+  async getLapidaOptions() {
+    try {
+      const tipoLapida = await TipoLapida.find();
+      const disenos = await DisenoLapida.find();
+      
+      const lapidaOptions = tipoLapida.map(lapida => {
+        const relatedDisenos = disenos.filter(disenos => disenos.tipoLapidaId.toString() === lapida._id.toString());
+        return {
+          tipoLapida: lapida,
+          disenos: relatedDisenos
+        };
+      });
+
+      return lapidaOptions;
+    } catch (error) {
+      throw new Error('Error al obtener las opciones de lápidas y diseños: ' + error.message);
+    }
+  }
+
+  async createTipoLapida(nombre, imagen) {
+    const tipoLapida = new TipoLapida({ nombre, imagen });
+    await tipoLapida.save();
+    return tipoLapida;
+  }
+
+  async createDisenoLapida(tipoLapidaId, nombre, imagen) {
+    const disenoLapida = new DisenoLapida({ tipoLapidaId, nombre, imagen });
+    await disenoLapida.save();
+    return disenoLapida;
+  }
 
   async createLapida(data) {
-    const imagenUrl = this.getImageUrl(data.tiposLapida, data.tiposDiseno);
-    return await LapidaRepository.create({ ...data, imagenUrl });
+    const imageUrl = data.imageUrl || '/images/lapidas/default.jpg';
+    return await LapidaRepository.create({ ...data, imageUrl });
   }
 
-  async getLapidaOptions() {
-    return {
-      tiposLapida: ['Tradicional', 'Moderna'],
-      tiposDiseno: ['Floral', 'Minimalista'],
-    };
-  }
-  
   async getAllLapidas() {
     return await LapidaRepository.findAll();
   }

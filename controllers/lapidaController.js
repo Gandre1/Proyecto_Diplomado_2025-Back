@@ -4,7 +4,7 @@ const CartService = require('../services/cartService');
 class LapidaController {
   async create(req, res) {
     try {
-      const { nombreMuerto, fechaNacimiento, fechaDefuncion, numeroLocalizacion, tiposLapida, tiposDiseno, precio } = req.body;
+      const { nombreMuerto, fechaNacimiento, fechaDefuncion, numeroLocalizacion, tiposLapida, tiposDiseno, precio, imageUrl } = req.body;
 
       const lapida = await LapidaService.createLapida({
         nombreMuerto,
@@ -14,6 +14,7 @@ class LapidaController {
         tiposLapida,
         tiposDiseno,
         precio,
+        imageUrl
       });
 
       res.status(201).json({ message: 'Lápida personalizada creada correctamente', lapida });
@@ -34,20 +35,31 @@ class LapidaController {
   async getOptions(req, res) {
     try {
       const options = await LapidaService.getLapidaOptions();
-      const imagePreviews = {};
-    
-      for (const tipo of options.tiposLapida) {
-        imagePreviews[tipo] = {};
-        for (const diseno of options.tiposDiseno) {
-          imagePreviews[tipo][diseno] = LapidaService.getImageUrl(tipo, diseno);
-        }
-      }
-        
-      res.json({ options, imagePreviews });
+      res.json(options);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }    
+  }
+
+  async createTipoLapida(req, res) {
+    try {
+      const { nombre, imagen } = req.body;
+      const newTipoLapida = await LapidaService.createTipoLapida(nombre, imagen);
+      res.status(201).json(newTipoLapida);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async createDisenoLapida(req, res) {
+    try {
+      const { tipoLapidaId, nombre, imagen } = req.body;
+      const newDisenoLapida = await LapidaService.createDisenoLapida(tipoLapidaId, nombre, imagen);
+      res.status(201).json(newDisenoLapida);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
   async addToCart(req, res) {
     try {
@@ -64,7 +76,7 @@ class LapidaController {
         tiposLapida: lapida.tiposLapida,
         tiposiseno: lapida.tiposDiseno,
         precio: lapida.precio,
-        imagenUrl: lapida.imagenUrl,
+        imageUrl: lapida.imageUrl,
       };
 
       const cartItem = await CartService.addToCart('lapida', lapidaId, lapidaDetails, cantidad);

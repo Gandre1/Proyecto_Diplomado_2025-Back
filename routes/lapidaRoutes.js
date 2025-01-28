@@ -20,6 +20,7 @@ router.get('/', LapidaController.getAll);
 router.post('/cart', LapidaController.addToCart);
 router.delete('/:id', verifyAdmin, LapidaController.delete);
 router.get('/options', LapidaController.getOptions);
-
+router.post('/tipo', LapidaController.createTipoLapida);
+router.post('/diseno', LapidaController.createDisenoLapida); 
 
 module.exports = router;
