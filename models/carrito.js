@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const carritoSchema = new mongoose.Schema({
-  productType: { type: String, required: true }, // Tipo del producto (ejemplo: 'lapida', 'flores', etc.)
-  productId: { type: mongoose.Schema.Types.ObjectId, required: true }, // ID del producto específico
-  productDetails: { type: Object, required: true }, // Detalles específicos del producto
+  productType: { type: String, required: true }, 
+  productId: { type: mongoose.Schema.Types.ObjectId, required: true }, 
+  productDetails: { type: Object, required: true },
   cantidad: { type: Number, required: true, default: 1 },
   precioTotal: { type: Number, required: true },
 });

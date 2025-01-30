@@ -1,4 +1,3 @@
-// models/DesignType.js
 const mongoose = require('mongoose');
 
 const disenoLapidaSchema = new mongoose.Schema({
