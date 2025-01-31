@@ -3,8 +3,8 @@ const CartService = require('../services/cartService');
 class cartController {
   async addToCart(req, res) {
     try {
-      const { productType, productId, productDetails, cantidad } = req.body;
-      const cartItem = await CartService.addToCart(productType, productId, productDetails, cantidad);
+      const { nombreProducto, detallesProducto, cantidad, precioTotal} = req.body;
+      const cartItem = await CartService.addToCart(nombreProducto, detallesProducto, cantidad, precioTotal);
       res.status(201).json({ message: 'Producto agregado al carrito', cartItem });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -15,6 +15,17 @@ class cartController {
     try {
       const cartItems = await CartService.getCartItems();
       res.json(cartItems);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async updateCartItem(req, res) {
+    try {
+      const { id } = req.params;
+      const { cantidad, precioTotal } = req.body;
+      const updatedItem = await CartService.updateCartItem(id, cantidad, precioTotal);
+      res.json({ message: 'Elemento actualizado', updatedItem });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

@@ -1,43 +1,27 @@
 const LapidaRepository = require('../db/repositorios/lapidaRepository');
-const TipoLapida = require('../models/tipoLapida');
 const DisenoLapida = require('../models/disenoLapida');
 
 class LapidaService {
 
-  async getLapidaOptions() {
+  async getLapidaDisenos() {
     try {
-      const tipoLapida = await TipoLapida.find();
       const disenos = await DisenoLapida.find();
-      
-      const lapidaOptions = tipoLapida.map(lapida => {
-        const relatedDisenos = disenos.filter(disenos => disenos.tipoLapidaId.toString() === lapida._id.toString());
-        return {
-          tipoLapida: lapida,
-          disenos: relatedDisenos
-        };
-      });
 
-      return lapidaOptions;
+      return disenos; 
+      
     } catch (error) {
-      throw new Error('Error al obtener las opciones de lápidas y diseños: ' + error.message);
+      throw new Error('Error al obtener los diseños: ' + error.message);
     }
   }
 
-  async createTipoLapida(nombre, imagen) {
-    const tipoLapida = new TipoLapida({ nombre, imagen });
-    await tipoLapida.save();
-    return tipoLapida;
-  }
-
-  async createDisenoLapida(tipoLapidaId, nombre, imagen) {
-    const disenoLapida = new DisenoLapida({ tipoLapidaId, nombre, imagen });
+  async createDisenoLapida(nombre, imagen) {
+    const disenoLapida = new DisenoLapida({nombre, imagen });
     await disenoLapida.save();
     return disenoLapida;
   }
 
   async createLapida(data) {
-    const imageUrl = data.imageUrl || '/images/lapidas/default.jpg';
-    return await LapidaRepository.create({ ...data, imageUrl });
+    return await LapidaRepository.create(data);
   }
 
   async getAllLapidas() {

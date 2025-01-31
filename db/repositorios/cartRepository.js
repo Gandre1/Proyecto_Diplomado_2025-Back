@@ -6,6 +6,14 @@ class CartRepository {
     return await cartItem.save();
   }
 
+  async updateItem(cartItemId, cantidad, precioTotal) {
+    return await CartItem.findByIdAndUpdate(
+      cartItemId,
+      { cantidad, precioTotal },
+      { new: true }
+    );
+  }
+
   async findAll() {
     return await CartItem.find();
   }

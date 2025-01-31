@@ -1,20 +1,14 @@
 const LapidaService = require('../services/lapidaService');
-const CartService = require('../services/cartService');
 
 class LapidaController {
   async create(req, res) {
     try {
-      const { nombreMuerto, fechaNacimiento, fechaDefuncion, numeroLocalizacion, tiposLapida, tiposDiseno, precio, imageUrl } = req.body;
-
+      const {nombre, color, precio, imagen } = req.body;
       const lapida = await LapidaService.createLapida({
-        nombreMuerto,
-        fechaNacimiento,
-        fechaDefuncion,
-        numeroLocalizacion,
-        tiposLapida,
-        tiposDiseno,
+        nombre,
+        color,
         precio,
-        imageUrl
+        imagen
       });
 
       res.status(201).json({ message: 'Lápida personalizada creada correctamente', lapida });
@@ -23,64 +17,31 @@ class LapidaController {
     }
   }
 
-  async getAll(req, res) {
-    try {
-      const lapidas = await LapidaService.getAllLapidas();
-      res.json(lapidas);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
-  async getOptions(req, res) {
-    try {
-      const options = await LapidaService.getLapidaOptions();
-      res.json(options);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
-  async createTipoLapida(req, res) {
-    try {
-      const { nombre, imagen } = req.body;
-      const newTipoLapida = await LapidaService.createTipoLapida(nombre, imagen);
-      res.status(201).json(newTipoLapida);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
   async createDisenoLapida(req, res) {
     try {
-      const { tipoLapidaId, nombre, imagen } = req.body;
-      const newDisenoLapida = await LapidaService.createDisenoLapida(tipoLapidaId, nombre, imagen);
+      const { nombre, imagen } = req.body;
+      const newDisenoLapida = await LapidaService.createDisenoLapida(nombre, imagen);
       res.status(201).json(newDisenoLapida);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   }
 
-  async addToCart(req, res) {
+  async getDisenos(req, res) {
     try {
-      const { lapidaId, cantidad } = req.body;
+      const disenos = await LapidaService.getLapidaDisenos();
+      res.json(disenos);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
-      const lapida = await LapidaService.getLapidaById(lapidaId);
-      if (!lapida) return res.status(404).json({ message: 'Lápida no encontrada' });
-
-      const lapidaDetails = {
-        nombreMuerto: lapida.nombreMuerto,
-        fechaNacimiento: lapida.fechaNacimiento,
-        fechaDefuncion: lapida.fechaDefuncion,
-        numeroLocalizacion: lapida.numeroLocalizacion,
-        tiposLapida: lapida.tiposLapida,
-        tiposiseno: lapida.tiposDiseno,
-        precio: lapida.precio,
-        imageUrl: lapida.imageUrl,
-      };
-
-      const cartItem = await CartService.addToCart('lapida', lapidaId, lapidaDetails, cantidad);
-      res.status(201).json({ message: 'Lápida personalizada agregada al carrito', cartItem });
+  async getAll(req, res) {
+    try {
+      const lapidas = await LapidaService.getAllLapidas();
+      const disenos = await LapidaService.getLapidaDisenos();
+  
+      res.json({ lapidas, disenos });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -93,7 +54,7 @@ class LapidaController {
       const lapida = await LapidaService.deleteLapida(id);
       if (!lapida) return res.status(404).json({ message: 'Lápida no encontrada' });
 
-      res.json({ message: 'Lápida personalizada eliminada', lapida });
+      res.json({ message: 'Lápida Eliminada', lapida });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

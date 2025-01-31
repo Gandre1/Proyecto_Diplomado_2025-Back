@@ -1,15 +1,17 @@
 const CartRepository = require('../db/repositorios/cartRepository');
 
 class CartService {
-  async addToCart(productType, productId, productDetails, cantidad) {
-    const precioTotal = productDetails.precio * cantidad;
-    const cartItemData = { productType, productId, productDetails, cantidad, precioTotal };
-
+  async addToCart(nombreProducto, detallesProducto, cantidad, precioTotal) {
+    const cartItemData = { nombreProducto, detallesProducto, cantidad, precioTotal };
     return await CartRepository.addItem(cartItemData);
   }
 
   async getCartItems() {
     return await CartRepository.findAll();
+  }
+
+  async updateCartItem(cartItemId, cantidad, precioTotal) {
+    return await CartRepository.updateItem(cartItemId, cantidad, precioTotal);
   }
 
   async removeCartItem(cartItemId) {
