@@ -3,8 +3,8 @@ const ProductService = require('../services/productService');
 class productController {
   async create(req, res) {
     try {
-      const { nombre, precio, url, imagen } = req.body;
-      const product = await ProductService.createProduct({ nombre, precio, url, imagen });
+      const { nombre, precio, idProducto, imagen } = req.body;
+      const product = await ProductService.createProduct({ nombre, precio, idProducto, imagen });
       res.status(201).json({ message: 'Producto agregado correctamente', product });
     } catch (error) {
       res.status(500).json({ message: error.message });
