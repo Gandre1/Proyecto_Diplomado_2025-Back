@@ -11,7 +11,7 @@ class LapidaController {
         imagen
       });
 
-      res.status(201).json({ message: 'Lápida personalizada creada correctamente', lapida });
+      res.status(201).json({ message: 'Lápida creada correctamente', lapida });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

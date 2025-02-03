@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const UserRepository = require('../db/repositorios/userRepository');
 
 class userService { 
@@ -16,11 +15,10 @@ class userService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error('Contraseña incorrecta');
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    return { token, role: user.role };
+    return { 
+      username: user.username,
+      role: user.role 
+    };
   }
 }
 
