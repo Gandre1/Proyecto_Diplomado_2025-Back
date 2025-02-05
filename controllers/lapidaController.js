@@ -70,6 +70,25 @@ class LapidaController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  async createDisenoLapida(req, res) {
+    try {
+      const { nombre, imagen } = req.body;
+      const newDisenoLapida = await LapidaService.createDisenoLapida(nombre, imagen);
+      res.status(201).json(newDisenoLapida);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async getDisenos(req, res) {
+    try {
+      const disenos = await LapidaService.getLapidaDisenos();
+      res.json(disenos);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new LapidaController();
