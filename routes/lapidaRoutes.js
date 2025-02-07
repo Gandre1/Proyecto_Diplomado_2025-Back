@@ -9,9 +9,9 @@ router.post('/diseno', LapidaController.createDisenoLapida);
 
 
 router.post('/', LapidaController.create);
-router.put('/', LapidaController.update);
 router.get('/', LapidaController.getAll);
 router.get('/:id', LapidaController.getById);
+router.put('/:id', LapidaController.update);
 router.delete('/:id', LapidaController.delete);
 
 module.exports = router;
