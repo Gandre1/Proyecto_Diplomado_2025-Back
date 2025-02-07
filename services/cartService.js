@@ -1,41 +1,48 @@
-const cartRepository = require('../db/repositorios/cartRepository');
 const CartRepository = require('../db/repositorios/cartRepository');
 
 class CartService {
-  async addToCart(req, res) {
+  async addToCart(cartItemData) {
     try {
-      const { nombreProducto, detallesProducto, cantidad, precioTotal } = req.body;
-      const userId = req.user.id;
-      const cartItemData = { nombreProducto, detallesProducto, cantidad, precioTotal, userId };
-      const cartItem = await cartRepository.addItem(cartItemData);
-      res.status(201).json({ message: 'Producto agregado al carrito', cartItem });
+      return await CartRepository.addToCart(cartItemData);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      throw new Error(`Error al agregar al carrito: ${error.message}`);
     }
   }
 
-  async getCartItems(req, res) {
+  async getCartItems(userId) {
     try {
-      const userId = req.user.id; 
-      const cartItems = await cartRepository.getCartItemsByUser(userId);
-      res.json(cartItems);
+      return await CartRepository.getCartItemsByUser(userId);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      throw new Error(`Error al obtener los elementos del carrito: ${error.message}`);
     }
   }
+
   async updateCartItem(cartItemId, cantidad, precioTotal) {
-    return await CartRepository.updateItem(cartItemId, cantidad, precioTotal);
+    try {
+      return await CartRepository.updateItem(cartItemId, cantidad, precioTotal);
+    } catch (error) {
+      throw new Error(`Error al actualizar el elemento del carrito: ${error.message}`);
+    }
   }
 
   async removeCartItem(cartItemId) {
-    const cartItem = await CartRepository.findById(cartItemId);
-    if (!cartItem) throw new Error('Elemento no encontrado en el carrito');
-    await CartRepository.deleteById(cartItemId);
-    return cartItem;
+    try {
+      const cartItem = await CartRepository.findById(cartItemId);
+      if (!cartItem) throw new Error('Elemento no encontrado en el carrito');
+      
+      await CartRepository.deleteById(cartItemId);
+      return cartItem;
+    } catch (error) {
+      throw new Error(`Error al eliminar el elemento del carrito: ${error.message}`);
+    }
   }
 
   async clearCart(userId) {
-    return await CartRepository.clearCart(userId);
+    try {
+      return await CartRepository.clearCart(userId);
+    } catch (error) {
+      throw new Error(`Error al limpiar el carrito: ${error.message}`);
+    }
   }
 }
 
