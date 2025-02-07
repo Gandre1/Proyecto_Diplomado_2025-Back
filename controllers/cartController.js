@@ -4,7 +4,8 @@ class cartController {
   async addToCart(req, res) {
     try {
       const { nombreProducto, detallesProducto, cantidad, precioTotal} = req.body;
-      const cartItem = await CartService.addToCart(nombreProducto, detallesProducto, cantidad, precioTotal);
+      const userId = req.user.id;
+      const cartItem = await CartService.addToCart({ nombreProducto, detallesProducto, cantidad, precioTotal, userId });
       res.status(201).json({ message: 'Producto agregado al carrito', cartItem });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -43,7 +44,7 @@ class cartController {
 
   async clearCart(req, res) {
     try {
-      await CartService.clearCart();
+      await CartService.clearCart(req.user.id);
       res.json({ message: 'Carrito limpiado' });
     } catch (error) {
       res.status(500).json({ message: error.message });
