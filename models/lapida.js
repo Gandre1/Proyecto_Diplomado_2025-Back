@@ -5,9 +5,13 @@ const lapidaSchema = new mongoose.Schema({
   opciones: [
     {
       color: { type: String, required: true },
-      imagen: { type: String, required: true },
-      precio: { type: Number, required: true },  
-      tamano: { type: String, required: true }  
+      imagen: { type: String, required: true },  // Imagen única por color
+      tamañosYPrecios: [
+        {
+          precio: { type: Number, required: true },
+          tamano: { type: String, required: true }
+        }
+      ]
     }
   ],
   posicionesTexto: { 
