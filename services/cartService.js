@@ -1,15 +1,27 @@
 const CartRepository = require('../db/repositorios/cartRepository');
 
 class CartService {
-  async addToCart(nombreProducto, detallesProducto, cantidad, precioTotal) {
-    const cartItemData = { nombreProducto, detallesProducto, cantidad, precioTotal };
-    return await CartRepository.addItem(cartItemData);
+  async addToCart(req, res) {
+    try {
+      const { nombreProducto, detallesProducto, cantidad, precioTotal } = req.body;
+      const userId = req.user.id; // Se asume que el ID del usuario está en el token de autorización
+      const cartItemData = { nombreProducto, detallesProducto, cantidad, precioTotal, userId };
+      const cartItem = await CartService.addToCart(cartItemData);
+      res.status(201).json({ message: 'Producto agregado al carrito', cartItem });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 
-  async getCartItems() {
-    return await CartRepository.findAll();
+  async getCartItems(req, res) {
+    try {
+      const userId = req.user.id; 
+      const cartItems = await CartService.getCartItemsByUser(userId);
+      res.json(cartItems);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
   async updateCartItem(cartItemId, cantidad, precioTotal) {
     return await CartRepository.updateItem(cartItemId, cantidad, precioTotal);
   }
