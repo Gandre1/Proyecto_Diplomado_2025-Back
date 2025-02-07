@@ -12,7 +12,11 @@ class userService {
       role
     });
 
-    const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, 'tu_clave_secreta', { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
     
     return { 
       token,
@@ -28,7 +32,11 @@ class userService {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new Error('Contraseña incorrecta');
 
-    const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, 'tu_clave_secreta', { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
     
     return { 
       token,
