@@ -6,7 +6,7 @@ class LapidaController {
     try {
       const { nombre, opciones, posicionesTexto } = req.body;
 
-      if (!nombre || !Array.isArray(opciones) || opciones.length === 0 || !precio) {
+      if (!nombre || !Array.isArray(opciones) || opciones.length === 0) {
         return res.status(400).json({ message: 'Datos incompletos o inválidos' });
       }
 
