@@ -3,7 +3,7 @@ const CartRepository = require('../db/repositorios/cartRepository');
 class CartService {
   async addToCart(cartItemData) {
     try {
-      return await CartRepository.addToCart(cartItemData);
+      return await CartRepository.addItem(cartItemData);
     } catch (error) {
       throw new Error(`Error al agregar al carrito: ${error.message}`);
     }

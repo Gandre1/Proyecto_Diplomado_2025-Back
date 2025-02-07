@@ -5,7 +5,7 @@ class CartRepository {
     const cartItem = new CartItem(cartItemData);
     return await cartItem.save();
   }
-
+  
   async getCartItemsByUser(userId) {
     return await CartItem.find({ userId });
   }
