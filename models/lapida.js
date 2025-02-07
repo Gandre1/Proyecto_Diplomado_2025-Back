@@ -9,6 +9,12 @@ const lapidaSchema = new mongoose.Schema({
     }
   ],
   precio: { type: Number, required: true },
+  posicionesTexto: { 
+    nombre: { x: Number, y: Number },
+    fechaNacimiento: { x: Number, y: Number },
+    fechaDefuncion: { x: Number, y: Number }
+  }
 });
+
 
 module.exports = mongoose.model('Lapida', lapidaSchema);
