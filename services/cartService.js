@@ -4,7 +4,7 @@ class CartService {
   async addToCart(req, res) {
     try {
       const { nombreProducto, detallesProducto, cantidad, precioTotal } = req.body;
-      const userId = req.user.id; // Se asume que el ID del usuario está en el token de autorización
+      const userId = req.user.id;
       const cartItemData = { nombreProducto, detallesProducto, cantidad, precioTotal, userId };
       const cartItem = await CartService.addToCart(cartItemData);
       res.status(201).json({ message: 'Producto agregado al carrito', cartItem });
