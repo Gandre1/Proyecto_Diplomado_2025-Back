@@ -1,9 +1,10 @@
 const LapidaService = require('../services/lapidaService');
+const Product = require('../models/product');
 
 class LapidaController {
   async create(req, res) {
     try {
-      const { nombre, opciones, precio, posicionesTexto } = req.body;
+      const { nombre, opciones, posicionesTexto } = req.body;
 
       if (!nombre || !Array.isArray(opciones) || opciones.length === 0 || !precio) {
         return res.status(400).json({ message: 'Datos incompletos o inválidos' });
@@ -12,7 +13,6 @@ class LapidaController {
       const lapida = await LapidaService.createLapida({
         nombre,
         opciones,
-        precio,
         posicionesTexto
       });
 
@@ -47,9 +47,9 @@ class LapidaController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { nombre, opciones, precio, posicionesTexto } = req.body;
+      const { nombre, opciones, posicionesTexto } = req.body;
 
-      const lapida = await LapidaService.updateLapida(id, { nombre, opciones, precio, posicionesTexto });
+      const lapida = await LapidaService.updateLapida(id, { nombre, opciones, posicionesTexto });
 
       if (!lapida) return res.status(404).json({ message: 'Lápida no encontrada' });
 
@@ -90,6 +90,7 @@ class LapidaController {
       res.status(500).json({ message: error.message });
     }
   }
+  
 }
 
 module.exports = new LapidaController();
