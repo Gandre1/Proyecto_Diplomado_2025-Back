@@ -32,6 +32,15 @@ class LapidaService {
     return await LapidaRepository.findById(id);
   }
 
+  async updateLapida(id, data) {
+    try {
+      const lapida = await LapidaRepository.updateById(id, data);
+      return lapida;
+    } catch (error) {
+      throw new Error("Error al actualizar la lápida: " + error.message);
+    }
+  }
+
   async deleteLapida(id) {
     const lapida = await LapidaRepository.findById(id);
     if (!lapida) throw new Error('Lápida no encontrada');

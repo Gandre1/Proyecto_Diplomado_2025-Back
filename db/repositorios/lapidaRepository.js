@@ -14,6 +14,10 @@ class lapidaRepository {
     return await Lapida.findById(lapidaId);
   }
 
+  async updateById(id, data) {
+    return await Lapida.findByIdAndUpdate(id, data, { new: true });
+  }  
+
   async deleteById(lapidaId) {
     return await Lapida.findByIdAndDelete(lapidaId);
   }
